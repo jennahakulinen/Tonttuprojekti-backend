@@ -38,14 +38,14 @@ const user_post = async (req, res, next) => {
 
   try {
     console.log('lomakkeesta', req.body);
-    const {name, email, passwd} = req.body; 
+    const {email, username, city, password, filename} = req.body; 
     //hash password
-    const hash = bcrypt.hashSync(passwd, salt);
-    const tulos = await addUser(name, email, hash, next);
+    const hash = bcrypt.hashSync(password, salt);
+    const tulos = await addUser(email, username, city, password, filename, hash, next);
     if (tulos.affectedRows > 0) {
       res.json({
         message: "user added",
-        user_id: tulos.insertId,
+        username: tulos.insertId,
       });
     } else {
       next(httpError('No user inserted', 400));
