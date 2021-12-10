@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const catRoute = require('./routes/catRoute');
+const recipeRoute = require('./routes/recipeRoute')
 const userRoute = require('./routes/userRoute');
 const authRoute = require('./routes/authRoute');
 const passport = require('./utils/pass');
@@ -10,6 +11,7 @@ const { httpError } = require('./utils/errors');
 
 const app = express();
 const port = 3000;
+// const port = 'http://10.114.34.22/'; //???
 app.use(cors());
 
 app.use(express.json()) // for parsing application/json
