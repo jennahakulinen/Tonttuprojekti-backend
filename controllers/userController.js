@@ -1,9 +1,9 @@
 "use strict";
 // userController
 
-const userModel = require("../models/userModel");
+const userModel = require('../models/userModel');
 
-const { users, getUser } = userModel;
+const { users, getUser} = userModel;
 
 const user_list_get = (req, res) => {
     const newUsers = users.map((user) => {

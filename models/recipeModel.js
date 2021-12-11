@@ -52,8 +52,8 @@ const recipes = [
 ];
 
 //Funktio, joka palauttaa yhden kissan id:n perusteella
-const getRecipe = (id) => {
-  return recipes.find((recipe) => recipeID.id === id);
+const getRecipe = (recipeID) => {
+  return recipes.find((recipe) => recipe.recipeID === recipeID);
 };
 
 module.exports = {
