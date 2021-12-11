@@ -7,7 +7,7 @@ const { users, getUser} = userModel;
 
 const user_list_get = (req, res) => {
     const newUsers = users.map((user) => {
-        delete user.password;
+        delete user.Password;
         return user;
     });
     res.json(newUsers);
@@ -15,13 +15,13 @@ const user_list_get = (req, res) => {
 
 const user_get = (req, res) => {
     const vastaus = getUser(req.params.id);
-    delete vastaus.password;
+    delete vastaus.Password;
     res.json(vastaus);
 };
 
 const user_post = (req, res) => {
     console.log(req.body);
-    res.send("With this endpoint you can add users");
+    res.send('With this endpoint you can add users');
 };
 
 module.exports = {
