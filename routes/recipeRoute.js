@@ -4,9 +4,9 @@
 const express = require('express');
 const multer = require('multer');
 const upload = multer({ dest: './uploads/' });
-const { 
-    recipe_list_get, 
-    recipe_get, 
+const {
+    recipe_list_get,
+    recipe_get,
     recipe_post } = require('../controllers/recipeController');
 const router = express.Router();
 
