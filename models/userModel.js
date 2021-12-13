@@ -26,11 +26,11 @@ const getUser = async (Username, next) => {
   }
 };
 
-const addUser = async (Username, Email, Password, Hometown, ProfilePic, next) => {
+const addUser = async (Username, Email, Password, Hometown, ProfilePic, Role, next) => {
   try {
     const [rows] = await promisePool.execute(
-      'INSERT INTO Cookmas_User (Username, Email, Password, Hometown, ProfilePic) VALUES (?, ?, ?, ?, ?)',
-      [Username, Email, Password, Hometown, ProfilePic]
+      'INSERT INTO Cookmas_User (Username, Email, Password, Hometown, ProfilePic, Role) VALUES (?, ?, ?, ?, ?)',
+      [Username, Email, Password, Hometown, ProfilePic, Role]
     );
     return rows;
   } catch (e) {
