@@ -61,6 +61,31 @@ const promisePool = pool.promise();
 // };
 
 
+// const getRecipeIds = async (next) => {
+//   try {
+//     const [rows] = await promisePool.execute(
+//         'SELECT RecipeID FROM Recipe'
+//     );
+//     return rows;
+// } catch (e) {
+//     console.error('getAllCategories error', e.message);
+//     next(httpError('Database error', 500));
+// }
+// };
+
+
+const getAllRecipes = async (next) => {
+  try {
+    const [rows] = await promisePool.execute(
+      'SELECT RecipeID FROM Recipe'
+    );
+    return rows;
+  } catch (e) {
+    console.error('getAllRecipes error', e.message);
+    next(httpError('Database error', 500));
+  }
+};
+
 
 const getRecipeData = async (id, next) => {
   try {
@@ -70,27 +95,28 @@ const getRecipeData = async (id, next) => {
       FROM (SELECT A.RecipeID, File, RecipeName, CookTime, Username, ProfilePic, CategoryName 
         FROM (
       (SELECT RecipeID, File, RecipeName, CookTime, Recipe.Username, ProfilePic FROM Recipe 
-       INNER JOIN Cookmas_User ON Recipe.Username = Cookmas_User.Username WHERE Recipe.RecipeID = '1') 
+       INNER JOIN Cookmas_User ON Recipe.Username = Cookmas_User.Username WHERE Recipe.RecipeID = ?) 
        AS A
       INNER JOIN 
       (SELECT CategoryName, Recipe.RecipeID FROM Category
       INNER JOIN Recipe_Category ON Recipe_Category.CategoryID = Category.CategoryID
       INNER JOIN Recipe ON Recipe.RecipeID = Recipe_Category.RecipeID
-      WHERE Recipe.RecipeID = '1') 
+      WHERE Recipe.RecipeID = ?) 
       AS B
       ON A.RecipeID = B.RecipeID)) AS C
       INNER JOIN 
       (SELECT Recipe.RecipeID, Quantity, UnitName, Ingredients.IngredientName FROM RecipeIng
       INNER JOIN Recipe ON Recipe.RecipeID = RecipeIng.RecipeID
       INNER JOIN Ingredients ON Ingredients.IngredientID = RecipeIng.IngredientID
-      WHERE Recipe.RecipeID = '1') AS D
+      WHERE Recipe.RecipeID = ?) AS D
       ON C.RecipeID=D.RecipeID) AS E
       INNER JOIN
       (SELECT Recipe.RecipeID, StepDescription FROM Steps 
       INNER JOIN Recipe ON Recipe.RecipeID = Steps.RecipeID
-      WHERE Recipe.RecipeID = '1') AS F
+      WHERE Recipe.RecipeID = ?) AS F
       ON E.RecipeID=F.RecipeID
-      `, [id]);
+      `, [id, id, id, id]);
+
 
     return rows;
   } catch (e) {
@@ -112,4 +138,5 @@ const getRecipeData = async (id, next) => {
 
 module.exports = {
   getRecipeData,
+  getAllRecipes,
 };
