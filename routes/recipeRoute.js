@@ -14,7 +14,7 @@ router.get('/', recipe_list_get);
 
 router.get('/:id', recipe_get);
 
-router.post('/', upload.single('recipe'), recipe_post);
+router.post('/', upload.single('recipe'), recipe_post); // ennen upload passport
 
 router.put('/', (req, res) => {
     res.send('From this endpoint you can edit recipes.');
