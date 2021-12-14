@@ -64,12 +64,12 @@ const recipe_post = async (req, res, next) => {
     }
 
     try {
+
         const { header, quantity, unit, ingredient, description, time, category } = req.body;
         const tulos = await addRecipe(header, quantity, unit, ingredient, description, time, category, req.file.filename, req.user.Username, next);
-        if (tulos.affectedRows > 0) {
+        if (tulos === "ok") {
             res.json({
-                message: "recipe added",
-                recipeID: tulos.insertId,
+                message: "recipe added"
             });
         } else {
             next(httpError('No user inserted', 400));

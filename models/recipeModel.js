@@ -130,20 +130,27 @@ const addRecipe = async (header, quantity, unit, ingredient, description, time, 
   try {
     const [recipe] = await promisePool.execute(
       `INSERT INTO Recipe (File, RecipeName, CookTime, Username) VALUES (?, ?, ?, ?)`, [picture, header, time, username]);
-    const reseptiID = resepti.insertId;
-    const [ainesosa] = await promisePool.execute(
-      `INSERT INTO Ingredients(IngredientName) VALUES (?)`, [ingredient]);
-    const ainesosaID = ainesosaID.insertId;
-    const [recipeing] = await promisePool.execute(
-      `INSERT INTO RecipeIng(Quantity, UnitName, IngredientID, RecipeID) VALUES (?, ?, ?, ?)`, [quantity, unit, ainesosaID, reseptiID]);
-    const [steps] = await promisePool.execute(
-      `INSERT INTO Steps(StepDescription, RecipeID) VALUES (?, ?)`, [description, reseptiID]);
-    const [kategoria] = await promisePool.execute(
-      `INSERT INTO Category(CategoryName) VALUES (?);`, [category]);
-    const kategoriaID = kategoriaID.insertId;
-    const [recipe_category] = await promisePool.execute(
-      `INSERT INTO Recipe_Category(RecipeID, CategoryID) VALUES (?, ?);`, [reseptiID, kategoriaID]);
-    return recipe_category;
+    const reseptiID = recipe.insertId;
+    for (let i = 0; ingredient.length > i; i++) {
+      const [ainesosa] = await promisePool.execute(
+        `INSERT INTO Ingredients(IngredientName) VALUES (?)`, [ingredient[i]]);
+      const ainesosaID = ainesosa.insertId;
+      const [recipeing] = await promisePool.execute(
+        `INSERT INTO RecipeIng(Quantity, UnitName, IngredientID, RecipeID) VALUES (?, ?, ?, ?)`, [quantity[i], unit[i], ainesosaID, reseptiID]);
+
+    }
+    for (let i = 0; description.length > i; i++) {
+      const [steps] = await promisePool.execute(
+        `INSERT INTO Steps(StepDescription, RecipeID) VALUES (?, ?)`, [description[i], reseptiID]);
+    }
+    for (let i = 0; category.length > i; i++) {
+      const [kategoria] = await promisePool.execute(
+        `INSERT INTO Category(CategoryName) VALUES (?);`, [category[i]]);
+      const kategoriaID = kategoria.insertId;
+      const [recipe_category] = await promisePool.execute(
+        `INSERT INTO Recipe_Category(RecipeID, CategoryID) VALUES (?, ?);`, [reseptiID, kategoriaID]);
+    }
+    return "ok";
   } catch (e) {
     console.error('addRecipe error', e.message);
     next(httpError('Database error', 500));
