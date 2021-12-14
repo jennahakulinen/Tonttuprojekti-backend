@@ -2,7 +2,7 @@
 // recipeController
 
 const recipeModel = require("../models/recipeModel");
-const { getRecipeData, getAllRecipes } = recipeModel;
+const { getRecipeData, getAllRecipes, addRecipe } = recipeModel;
 const { httpError } = require("../utils/errors");
 const { validationResult } = require("express-validator");
 
@@ -49,9 +49,35 @@ const recipe_get = async (req, res, next) => {
     }
 };
 
-const recipe_post = (req, res) => {
-    console.log(req.body, req.file);
-    res.send("With this endpoint you can add recipes");
+const recipe_post = async (req, res, next) => {
+    console.log('recipe_post', req.body, req.file);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        console.log('recipe_post validation', errors.array());
+        next(httpError('Invalid data', 400));
+        return;
+    }
+    if (!req.file) {
+        const err = httpError('File not valid', 400);
+        next(err);
+        return;
+    }
+
+    try {
+        const { header, quantity, unit, ingredient, description, time, category } = req.body;
+        const tulos = await addRecipe(header, quantity, unit, ingredient, description, time, category, req.file.filename, req.user.Username, next);
+        if (tulos.affectedRows > 0) {
+            res.json({
+                message: "recipe added",
+                recipeID: tulos.insertId,
+            });
+        } else {
+            next(httpError('No user inserted', 400));
+        }
+    } catch (e) {
+        console.log('recipe_post error', e.message);
+        next(httpError('internal server error', 500));
+    }
 };
 
 module.exports = {
@@ -61,7 +87,7 @@ module.exports = {
 };
 
 
-function process_recipe_data(vastaus) {
+const process_recipe_data = (vastaus) => {
     const return_json = {
         "recipeID": vastaus[0].RecipeID,
         "filename": vastaus[0].File,
@@ -80,8 +106,8 @@ function process_recipe_data(vastaus) {
     return return_json;
 }
 
-function flatten_table_to_json(table, keys) {
-    var some_array = [];
+const flatten_table_to_json = (table, keys) => {
+    let some_array = [];
     for (let i = 0; i < table.length; i++) {
         const collection = {}
         for (const key in keys) {
@@ -98,8 +124,8 @@ function flatten_table_to_json(table, keys) {
     return new_array
 }
 
-function flatten_table_to_array(table, key) {
-    var some_array = [];
+const flatten_table_to_array = (table, key) => {
+    let some_array = [];
     for (let i = 0; i < table.length; i++) {
         some_array.push(table[i][key]);
     }
@@ -107,13 +133,13 @@ function flatten_table_to_array(table, key) {
     return some_array
 }
 
-function remove_duplicates(arr) {
-    var obj = {};
-    var ret_arr = [];
-    for (var i = 0; i < arr.length; i++) {
+const remove_duplicates = (arr) => {
+    let obj = {};
+    let ret_arr = [];
+    for (let i = 0; i < arr.length; i++) {
         obj[arr[i]] = true;
     }
-    for (var key in obj) {
+    for (let key in obj) {
         ret_arr.push(key);
     }
     return ret_arr;
