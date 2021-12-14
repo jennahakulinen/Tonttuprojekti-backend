@@ -4,6 +4,7 @@
 const express = require('express');
 const multer = require('multer');
 const upload = multer({ dest: './uploads/' });
+const passport = require('../utils/pass');
 const {
     recipe_list_get,
     recipe_get,
@@ -14,7 +15,7 @@ router.get('/', recipe_list_get);
 
 router.get('/:id', recipe_get);
 
-router.post('/', upload.single('picture'), recipe_post); // ennen upload passport
+router.post('/', passport.authenticate('jwt', { session: false }), upload.single('picture'), recipe_post); // ennen upload passport
 
 router.put('/', (req, res) => {
     res.send('From this endpoint you can edit recipes.');

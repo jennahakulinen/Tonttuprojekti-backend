@@ -130,17 +130,17 @@ const addRecipe = async (header, quantity, unit, ingredient, description, time, 
   try {
     const [recipe] = await promisePool.execute(
       `INSERT INTO Recipe (File, RecipeName, CookTime, Username) VALUES (?, ?, ?, ?)`, [picture, header, time, username]);
-    const reseptiID = resepti.insertId;
+    const reseptiID = recipe.insertId;
     const [ainesosa] = await promisePool.execute(
       `INSERT INTO Ingredients(IngredientName) VALUES (?)`, [ingredient]);
-    const ainesosaID = ainesosaID.insertId;
+    const ainesosaID = ainesosa.insertId;
     const [recipeing] = await promisePool.execute(
       `INSERT INTO RecipeIng(Quantity, UnitName, IngredientID, RecipeID) VALUES (?, ?, ?, ?)`, [quantity, unit, ainesosaID, reseptiID]);
     const [steps] = await promisePool.execute(
       `INSERT INTO Steps(StepDescription, RecipeID) VALUES (?, ?)`, [description, reseptiID]);
     const [kategoria] = await promisePool.execute(
       `INSERT INTO Category(CategoryName) VALUES (?);`, [category]);
-    const kategoriaID = kategoriaID.insertId;
+    const kategoriaID = kategoria.insertId;
     const [recipe_category] = await promisePool.execute(
       `INSERT INTO Recipe_Category(RecipeID, CategoryID) VALUES (?, ?);`, [reseptiID, kategoriaID]);
     return recipe_category;
