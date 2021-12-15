@@ -104,34 +104,5 @@ CREATE TABLE Favourites
   FOREIGN KEY (RecipeID) REFERENCES Recipe(RecipeID)
 );
 
-INSERT INTO Cookmas_User (Username, Email, Password, Hometown, ProfilePic) 
-VALUES
-('Joulupukki', 'joulupukki@korvatunturi.fi', '1234', 'Rovaniemi', 
-'https://im.mtv.fi/image/7646368/landscape16_9/1600/900/4678580b72d63463b0627ab101bcba02/zx/joulupukki-selfie.jpg');
-
-
---Reseptin lisäys
-
-INSERT INTO Recipe (File, RecipeName, RecipeID, Description, CookTime, Username) 
-VALUES (?, ?, ?, ?, ?, ?);
-
---Reseptin muokkaus
-
-UPDATE Recipe 
-SET 
-File = ?, RecipeName = ?, Description = ?, CookTime = ?, 
-WHERE RecipeID = ? AND Cookmas_User.Username = ?;
-
---Käyttäjän lisäys
-
-INSERT INTO Cookmas_User (Username, email, password, Hometown, ProfilePic) 
-VALUES (?, ?, ?, ?);
-
---Käyttäjän muokkaus
-
-UPDATE Cookmas_User
-SET
-Username = ?, email = ?, password = ?, Hometown = ?, ProfilePic = ?;
-
 
 
