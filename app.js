@@ -29,11 +29,9 @@ app.use('/thumbnails', express.static('thumbnails'));
 app.use(passport.initialize());
 
 app.use('/auth', authRoute);
-// app.use('/cat', passport.authenticate('jwt', {session: false}), catRoute);
-app.use('/user', passport.authenticate('jwt', {session: false}), userRoute);
+app.use('/user', passport.authenticate('jwt', { session: false }), userRoute);
 
 app.use('/recipe', recipeRoute);
-// app.use('/user', userRoute);
 app.use('/unit', unitRoute);
 app.use('/category', categoryRoute);
 app.use('/step', stepRoute);
@@ -48,13 +46,14 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
     res
-    .status(err.status || 500)
-    .json(
-        {
-            error: {
-                message: err.message || 'internal server error', }
-        }
-    );
+        .status(err.status || 500)
+        .json(
+            {
+                error: {
+                    message: err.message || 'internal server error',
+                }
+            }
+        );
 });
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

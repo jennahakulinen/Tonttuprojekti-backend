@@ -6,7 +6,6 @@ const { getRecipeData, getAllRecipes, addRecipe } = recipeModel;
 const { httpError } = require("../utils/errors");
 const { validationResult } = require("express-validator");
 
-//const recipes = recipeModel.recipes; , sama lyhyemmin alla
 const { recipes, getRecipe } = recipeModel;
 
 const recipe_list_get = async (req, res, next) => {

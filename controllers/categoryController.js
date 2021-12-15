@@ -1,7 +1,6 @@
 'use strict';
 
 const categoryModel = require('../models/categoryModel');
-// const { getAllCategories } = require('../models/categoryModel');
 const { getCategory, getAllCategories, addCategory } = categoryModel;
 
 const category_list_get = async (req, res, next) => {
