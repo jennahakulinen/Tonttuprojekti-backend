@@ -13,6 +13,9 @@ Api for Cookmas app.
 ```http
   Content-type: application/json
 ```
+```http
+  Authorization: Bearer token
+```
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
@@ -25,7 +28,6 @@ Response:
 {
   "Username": "Joulupukki",
   "Email": "joulu.pukki@korvatunturi.fi",
-  "Password": "$2a$12$kVUpRoU.nMpVorM9E2ZfJuk1aupdB1MQIiIrLQG99hQ1N2q2BwDre",
   "Hometown": "Rovaniemi",
   "ProfilePic": "309db789d24e3dcc31a758dcd328c91c",
   "Role": 1
@@ -58,5 +60,63 @@ Response:
   "email": "joulutonttu@tonttu.fi",
   "username": "JouluTonttu",
   "city": "Rovaniemi",
+}
+```
+#### Get one recipe
+
+```http
+  GET /recipe/recipeID
+```
+```http
+  Authorization: Bearer token
+```
+
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `recipeID`      | `int` | **Required**. |
+
+Response:
+
+```json
+{
+  "recipeID": 22,
+  "filename": "af790c1cd66c192ee00ad0d6a3fd3511",
+  "title": "Joulukinkku",
+  "user": "Joulupukki",
+  "profilepic": "309db789d24e3dcc31a758dcd328c",
+}
+```
+#### Add recipe
+
+```http
+  POST /recipe
+```
+
+```http
+  Authorization: Bearer token
+```
+
+```http
+  Content-type: multipart/form-data
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `header`     | `string` | **Required, min length 3** |
+| `quantity` | `int` | **Required, min 1** |
+| `unit`    | `string` | **Required, max 3** |
+| `ingredient`       | `string` | **Required** |
+| `description`       | `string` | **Required** |
+| `time`       | `int` | **Required, min 1** |
+| `category`       | `string` | **Required** |
+| `picture`       | `file` | **Required, jpg, png, gif** |
+
+Response:
+
+```json
+{
+  "message": "Recipe added!",
+  "recipeID": 3
 }
 ```
