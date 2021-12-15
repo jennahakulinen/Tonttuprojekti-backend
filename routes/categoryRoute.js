@@ -2,9 +2,9 @@
 // recipeRoute
 
 const express = require('express');
-// const multer = require('multer');
-// const upload = multer({ dest: './uploads/' });
-const { 
+const multer = require('multer');
+const upload = multer({ dest: './uploads/' });
+const {
     category_list_get,
     category_get,
     category_post, } = require('../controllers/categoryController');
